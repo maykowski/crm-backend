@@ -1,13 +1,14 @@
 spring:
     jpa:
         database: MYSQL
-        hibernate:
-            ddl-auto: create-drop
+#        hibernate:
+#            ddl-auto: create-drop
 
     datasource:
-        url: jdbc:mysql://localhost:3306/springbootdb_test
+        url: jdbc:mysql://localhost:3306/springbootdb_test?useUnicode=true&characterEncoding=utf8&useSSL=false
         username: maykowski
         password: '!@#alicia123'
         driver-class-name: com.mysql.jdbc.Driver
+
 
 #    profiles: test

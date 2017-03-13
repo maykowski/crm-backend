@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
 
 /**
  * Created by Wojtek on 09.03.2017.
@@ -16,7 +15,7 @@ public class Followup {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String comment;
+    private String description;
     private String status;
     @Column(name="create_date")
     private Timestamp createDate;
@@ -31,13 +30,26 @@ public class Followup {
     public Followup() {
     }
 
-    public String getComment() {
-        return comment;
+    public Followup(String description, Contact contact) {
+        this.description = description;
+        this.contact = contact;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getStatus() {
@@ -75,7 +87,7 @@ public class Followup {
     @Override
     public String toString() {
         return String.format(
-                "Followpup[id=%d, status='%s', comment='%s']",
-                id, status, comment);
+                "Followpup[id=%d, status='%s', description='%s']",
+                id, status, description);
     }
 }
