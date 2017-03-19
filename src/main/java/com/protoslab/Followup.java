@@ -16,11 +16,15 @@ public class Followup {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String description;
-    private String status;
+    @OneToOne
+    @JoinColumn (name = "status_id")
+    private Status status;
     @Column(name="create_date")
     private Timestamp createDate;
     @Column(name="update_date")
     private Timestamp updateDate;
+    @Column(name="due_date")
+    private Timestamp dueDate;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contact_id", nullable = false)
     @JsonIgnore
@@ -30,8 +34,10 @@ public class Followup {
     public Followup() {
     }
 
-    public Followup(String description, Contact contact) {
+    public Followup(String description, Status status, Timestamp dueDate, Contact contact) {
         this.description = description;
+        this.status = status;
+        this.dueDate = dueDate;
         this.contact = contact;
     }
 
@@ -52,11 +58,11 @@ public class Followup {
         this.description = description;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -82,6 +88,14 @@ public class Followup {
 
     public void setContact(Contact contact) {
         this.contact = contact;
+    }
+
+    public Timestamp getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(Timestamp dueDate) {
+        this.dueDate = dueDate;
     }
 
     @Override

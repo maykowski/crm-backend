@@ -1,8 +1,8 @@
 spring:
     jpa:
         database: MYSQL
-#        hibernate:
-#            ddl-auto: create-drop
+        hibernate:
+            ddl-auto: update
 
     datasource:
         url: jdbc:mysql://localhost:3306/springbootdb_test?useUnicode=true&characterEncoding=utf8&useSSL=false

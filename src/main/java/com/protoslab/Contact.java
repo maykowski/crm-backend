@@ -32,7 +32,9 @@ public class Contact {
     private Timestamp updateDate;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "contact")
     private List<Followup> followups;
-
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "training_id")
+    private Training training;
 
     public Contact() {
     }
@@ -149,6 +151,14 @@ public class Contact {
         this.followups = followups;
     }
 
+
+    public Training getTraining() {
+        return training;
+    }
+
+    public void setTraining(Training training) {
+        this.training = training;
+    }
     @Override
     public String toString() {
         return String.format(

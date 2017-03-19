@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/{contactId}/followups")
@@ -28,7 +30,7 @@ class FollowupController {
     @RequestMapping(method = RequestMethod.GET)
     Collection<Followup> getFollowups(@PathVariable Integer contactId) {
 //		this.validateUser(contactId);
-        return this.followupRepository.findByContactId(contactId.longValue(), new PageRequest(0, 10)).getContent();
+        return this.followupRepository.findByContactId(contactId.longValue(), new PageRequest(0, 1000)).getContent();
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -37,7 +39,10 @@ class FollowupController {
 
         Contact contact = this.contactRepository.findOne(new Long(contactId));
         if (contact != null) {
-            Followup result = followupRepository.save(new Followup(followup.getDescription(), contact));
+            followup.setContact(contact);
+            followup.setCreateDate(new Timestamp(new Date().getTime()));
+            followup.setUpdateDate(new Timestamp(new Date().getTime()));
+            Followup result = followupRepository.save(followup);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest().path("/{id}")

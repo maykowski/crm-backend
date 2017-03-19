@@ -13,5 +13,7 @@ public interface ContactRepository extends CrudRepository<Contact, Long> {
 
     Page<Contact> findAll(Pageable pageable);
 
+    Page<Contact> findByPhoneIsNotNullOrPhoneSummaryIsNotNull(Pageable pagebale);
+
     Optional<Contact> findByName(String name);
 }

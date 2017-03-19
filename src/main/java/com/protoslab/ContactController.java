@@ -38,8 +38,7 @@ public class ContactController {
     @RequestMapping("/contacts")
 
     public List<Contact> getAllContacts() {
-        return contactRepository.findAll(new PageRequest(1, 10)).getContent();
-//        return "hello";
+        return contactRepository.findByPhoneIsNotNullOrPhoneSummaryIsNotNull(new PageRequest(0, 100)).getContent();
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/contacts/{contactId}")
