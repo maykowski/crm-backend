@@ -1,6 +1,7 @@
 package com.protoslab;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,9 +37,8 @@ public class ContactController {
 //    }
 
     @RequestMapping("/contacts")
-
-    public List<Contact> getAllContacts() {
-        return contactRepository.findByPhoneIsNotNullOrPhoneSummaryIsNotNull(new PageRequest(0, 100)).getContent();
+    public Page<Contact> getAllContacts(@RequestParam(value = "page") int page, @RequestParam(value = "size") int size) {
+        return contactRepository.findByPhoneIsNotNullOrPhoneSummaryIsNotNull(new PageRequest(page, size));
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/contacts/{contactId}")

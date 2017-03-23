@@ -2,7 +2,7 @@ package com.protoslab;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Wojtek on 09.03.2017.
@@ -35,6 +35,12 @@ public class Contact {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "training_id")
     private Training training;
+    @Transient
+    private Date trainingDate;
+    @Transient
+    private Date lastFollowupDate;
+    @Transient
+    private String lastFollowupStatus;
 
     public Contact() {
     }
@@ -156,9 +162,47 @@ public class Contact {
         return training;
     }
 
+    public Date getTrainingDate() {
+        if (training == null) return null;
+        return training.getWhen();
+    }
+
+    public void setTrainingDate(Date trainingDate) {
+        this.trainingDate = trainingDate;
+    }
+
+    public Date getLastFollowupDate() {
+        if (this.followups.isEmpty())
+            return null;
+        Optional<Timestamp> optionalTS = this.followups.stream().filter(fu -> fu.getDueDate() != null).map(u -> {
+            return u.getDueDate();
+        }).max(Timestamp::compareTo);
+        Date maxDate = optionalTS.isPresent()?optionalTS.get():null;
+        return maxDate;
+    }
+
+    public void setLastFollowupDate(Date lastFollowupDate) {
+        this.lastFollowupDate = lastFollowupDate;
+    }
+
     public void setTraining(Training training) {
         this.training = training;
     }
+
+    public String getLastFollowupStatus() {
+        if (this.followups.isEmpty())
+            return null;
+        Optional<String> optionalStatus = this.followups.stream().filter(fu -> fu.getStatus().getName() != null).map(u -> {
+            return u.getStatus().getName();
+        }).max(String::compareTo);
+        String lastStatus = optionalStatus.isPresent()?optionalStatus.get():null;
+        return lastStatus;
+    }
+
+    public void setLastFollowupStatus(String lastFollowupStatus) {
+        this.lastFollowupStatus = lastFollowupStatus;
+    }
+
     @Override
     public String toString() {
         return String.format(
