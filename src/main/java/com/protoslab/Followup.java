@@ -101,7 +101,7 @@ public class Followup {
     @Override
     public String toString() {
         return String.format(
-                "Followpup[id=%d, status='%s', description='%s']",
-                id, status, description);
+                "Followpup[id=%d, status='%s', due='%s']",
+                id, status, dueDate);
     }
 }

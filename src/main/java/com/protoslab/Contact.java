@@ -22,13 +22,13 @@ public class Contact {
     private String email;
     private String company;
     private String link;
-    @Column(name="phone_summary")
+    @Column(name = "phone_summary")
     private String phoneSummary;
     @Lob
     private String summary;
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private Timestamp createDate;
-    @Column(name="update_date")
+    @Column(name = "update_date")
     private Timestamp updateDate;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "contact")
     private List<Followup> followups;
@@ -174,11 +174,9 @@ public class Contact {
     public Date getLastFollowupDate() {
         if (this.followups.isEmpty())
             return null;
-        Optional<Timestamp> optionalTS = this.followups.stream().filter(fu -> fu.getDueDate() != null).map(u -> {
-            return u.getDueDate();
-        }).max(Timestamp::compareTo);
-        Date maxDate = optionalTS.isPresent()?optionalTS.get():null;
-        return maxDate;
+        List<Followup> followups = new ArrayList<>(this.followups);
+        Collections.sort(followups, Comparator.comparing(Followup::getCreateDate).reversed());
+        return followups.get(0).getDueDate();
     }
 
     public void setLastFollowupDate(Date lastFollowupDate) {
@@ -192,11 +190,9 @@ public class Contact {
     public String getLastFollowupStatus() {
         if (this.followups.isEmpty())
             return null;
-        Optional<String> optionalStatus = this.followups.stream().filter(fu -> fu.getStatus().getName() != null).map(u -> {
-            return u.getStatus().getName();
-        }).max(String::compareTo);
-        String lastStatus = optionalStatus.isPresent()?optionalStatus.get():null;
-        return lastStatus;
+        List<Followup> followups = new ArrayList<>(this.followups);
+        Collections.sort(followups, Comparator.comparing(Followup::getCreateDate).reversed());
+        return followups.get(0).getStatus() != null?followups.get(0).getStatus().getName():null;
     }
 
     public void setLastFollowupStatus(String lastFollowupStatus) {
